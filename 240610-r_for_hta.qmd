@@ -1,0 +1,649 @@
+---
+title: "`tatooheene`: The R Package Toolbox for Health Economic Evaluations Aligned with the Dutch Guideline"
+title-slide-attributes:
+  data-background-size: "cover"
+  data-background-opacity: "0.5"
+  data-notes: "Hi everyone, and thank you for joining this session.
+My name is Frederick Thielen, and I am based at the Erasmus University in Rotterdam.
+
+Today, I would like to walk you through a small but very practical tool we developed to support health economic evaluations that follow the Dutch guideline.
+
+The package is called Tatooheene. And the key idea behind it is quite simple: we wanted to make it easier — and more reliable — to do evaluations in line with the national standard.
+But we also wanted to do that in a way that is reproducible, transparent, and avoids repetitive manual work.
+
+Imagine you are building a model for a new intervention. You are trying to calculate productivity losses using the friction cost method, or adjust a unit cost to current price levels — and you are flipping through PDFs, copy-pasting values, maybe checking an old Excel tool from 2014.
+It works — sort of — but it is slow, error-prone, and hard to track.
+
+Tatooheene is designed to take care of exactly those steps. To take what’s already in the Dutch guideline and make it directly usable in R — with functions that are documented, tested, and easy to integrate into your model code."
+subtitle: |
+  <div class="subtitle-container">
+  <img src="fred.jpg" alt="Stijn Image" class="subtitle-image">
+  <div class="subtitle-text">
+    <p><span style="color:purple;">Erasmus School of Health Policy & Management (ESHPM)</p><span>
+    <p><i class="fas fa-envelope"></i> <strong>Email:</strong> thielen@eshpm.eur.nl</p>
+    <p><i class="fab fa-github"></i> <strong>GitHub:</strong> fthielen</p>
+format: 
+  revealjs:
+   logo: "eshpm-logo.jpg"
+   scrollable: true
+   slide-number: true 
+   incremental: false
+   center: true
+   chalkboard: true
+   self-contained: false
+editor_options: 
+  chunk_output_type: console
+css: styles.css
+---
+
+
+## 🧾 Conflict of Interest Disclosure
+
+- I have received research funding or support from Celgene, CADTH, NICE, ZIN, VWS, FOPH, and EHA.
+
+<br>
+
+- I provided consultancy or lectures for AstraZeneca, Boehringer-Ingelheim, Optimax Access, Dark Peak Analytics, ASPHER, GCCHE, and TriData.
+
+<br>
+
+- I received hospitality from European Access Academy (dinner) and MSD (coffee). One unpaid talk to COGEM.
+
+<br>
+
+::: {style="font-size: 65%;"}
+Abbreviations:
+CADTH = Canadian Agency for Drugs and Technologies in Health, NICE = National Institute for Health and Care Excellence, ZIN = Dutch Healthcare Institute, VWS = Dutch Ministry of Health, Welfare and Sport, FOPH = Swiss Federal Office of Public Health, EHA = European Haematology Association, ASPHER = Association of Schools of Public Health in the European Region, GCCHE = Global Consortium on Climate and Health Education, COGEM = Dutch Commission on Genetic Modification
+:::
+
+::: notes
+Just to be transparent, I have worked with a number of organisations, but none of those relationships are related to this package or presentation.
+:::
+
+
+## 🌍 HTA: a national approach?
+
+::::: columns
+::: {.column width="70%"}
+![DOI: 10.1007/s41669-020-00250-7](https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs41669-020-00250-7/MediaObjects/41669_2020_250_Fig2_HTML.png?as=webp)
+:::
+
+::: {.column width="30%"}
+::: {style="font-size: 75%;"}
+
+<br>
+
+-   Many EU (and non-EU) countries have their own HTA processes and pertinent guidelines
+-   Huge variation in recommended study perspectives and to-be-included costs
+-   No consensus on how to calculate the rate for discounting
+:::
+:::
+:::::
+
+
+::: notes
+As you know, in many countries, the HTA process is national — and this is true for both EU and non-EU settings. Each country develops its own guidelines, often tailored to their healthcare system, policy priorities, and local data sources.
+
+What you see in this figure is just how fragmented that landscape can be.
+There is huge variation in how costs are valued, what study perspectives are recommended — whether that is healthcare payer, societal, or something in between — and even in how core methodological elements like discounting are handled.
+
+Many countries recommend discounting both costs and effects, but discount rates vary significantly and can be different for costs and effects.
+
+So, while we often talk about HTA as if it were one unified approach, in practice, it is highly context-dependent. And if you want to do work that aligns with your own national guidelines — or submit a reimbursement dossier — then you have to follow the local rules exactly.
+
+That is where a tool like Tatooheene comes in. It is built around the Dutch guideline, helping ensure that your analysis is not just good, but also methodologically compliant.
+:::
+
+## 🇳🇱 The Dutch Guideline for economic evaluations in healthcare (2024 version)
+
+🔎 Revised and published in January 2024
+
+::: columns
+::: {.column width="60%"}
+
+<br>
+
+
+Contains three in-depth modules:
+
+-   💶 The **costing manual**
+-   🎭 **QALY and quality-of-life measures** (only available in Dutch)
+-   📊 **Uncertainty and Value of information analyses** (only available in Dutch).
+:::
+
+::: {.column width="40%"}
+```{=html}
+<iframe width="780" height="500" src="manualpdf.pdf"></iframe>
+```
+:::
+:::
+
+::: notes
+Recently, in January 2024, the Dutch Healthcare Institute published an updated version of its guideline for economic evaluations in healthcare. It includes three detailed modules: one on costing, one on QALY and quality-of-life measures, and one on uncertainty and value of information analyses. Today I will mainly focus on the costing manual, as that is where Tatooheene fits in.
+:::
+
+
+## Things the Dutch costing manual covers
+
+-   A step-by-step plan for costing studies
+-   How to *identify*, *value*, and *measure* costs in healthcare
+-   Repository for *reference prices*
+-   Several formulas for:
+    -   **discounting** costs and effects
+    -   calculating the **friction period** (to determine productivity losses)
+    -   calculating annual costs for **depreciation and interest**
+
+::: notes
+The Dutch costing manual is quite detailed and prescriptive — and in many ways, that is a strength. It gives a clear, step-by-step framework for conducting costing studies in healthcare.
+
+It tells you how to identify relevant cost categories, how to measure them, how to assign values — and it provides a repository of reference prices to make that process easier and more standardised.
+
+It also includes a number of standard formulas:
+- For example, how to discount future costs and effects
+- How to calculate productivity losses using the so-called friction cost method
+- And how to compute annual costs for capital goods, including depreciation and interest
+
+The aim here is consistency across studies that feed into reimbursement decisions. But in practice, these calculations can be tricky, especially if done manually or copied across spreadsheets. They need to be updated regularly and are prone to error — and that is exactly what we tried to address with our package.
+:::
+
+## 🤔 Why this toolbox?
+
+::: notes
+Although the guideline is detailed and provides relatively recent reference values, we have seen that these values are often outdated in published studies. [click]
+
+For example, the friction period which is needed to estimate productivity losses, needs to be calculated with recent data from Statistics Netherlands. [click]
+
+But several studies kept using the 2014 [click] value: long after it was outdated and up to the year 2021. [click] But in fact, these values should have been updated and were quite different from the stated reference value. [click]
+
+A possible reason for this is that the manual updating is time consuming, but also that researchers rely on the reference values instead of the reference formulas.
+
+:::
+
+
+::: {style="font-size: 85%;"}
+::: columns
+::: {.column width="50%"}
+
+**Dutch EE guideline provides**
+
+- 📏 Reference values for 2023
+- 📊 Database  updates required from Statistics Netherlands (CBS) and the OECD
+
+*BUT: these values are often outdated in published studies*
+
+
+:::
+
+::: {.column width="50%" .fragment}
+
+**Example: friction period**
+
+
+- $\text{Friction period} = \frac{365}{\big(\frac{V_f}{V_o}\big)} + 28$
+  
+::: {style="font-size: 55%;"}
+   *With*:  
+    $V_f$ = Number of filled vacancies  
+    $V_o$ = Number of open vacancies
+:::
+
+::: {.incremental}
+- Stated friction period in 2014 = 85 days  
+  - Used for analyses in 2017, 2018, 2019, and 2021  
+- Should have been: 101 (2017), 107 (2018), 111 (2019), 120 (2021) 🧮
+
+:::
+:::
+:::
+:::
+. . .
+
+::: {.center-collapse}
+
+::: {.callout-important .compact-callout}
+# Possible reason
+
+Updating data is manual, tidious, and time consuming
+
+:::
+:::
+
+
+
+
+
+## 🛸 Meet Tatooheene
+
+**T**echnology **A**ppraisal **TOO**lbox for **H**ealth **E**conomic **E**valuations in the **NE**therlands
+
+::: {.columns}
+::: {.column width="50%"}
+
+<br>
+
+- 🧰 R package + 🖥️ Shiny app
+- 🆓 Open source
+   - 🛠️ On CRAN
+   - 📂 On GitHub
+
+
+:::
+
+::: {.column width="50%"}
+
+::: {.center-collapse}
+
+<br>
+
+![](hexa.png){width="40%"}
+:::
+:::
+:::
+
+::: {.center-collapse}
+<br>
+
+<br>
+
+
+Developed by:
+
+👨‍🔬 Frederick Thielen · 👨‍💻 Stijn Peeters · 👩‍🏫 Eline Krijkamp
+
+:::
+
+::: notes
+To make life of R-modellers and code reviewers easier, we developed Tatooheene, which stands for Technology Appraisal Toolbox for Health Economic Evaluations in the Netherlands. It is an open source R package and Shiny app that automates the most common calculations in health economic evaluations **that are stated** in the Dutch guideline. It is available on CRAN and on GitHub, and it was developed by  Stijn Peeters, Eline Krijkamp and myself. Both Eline and Stijn you have met on day one of this conference.
+:::
+
+
+## 🧠 What does it do?
+
+Automates:
+
+- 🧮 CPI-based inflation
+- 🧱 Friction method
+- 🌍 Purchasing power parity (PPP) conversions
+- 🏥 Costing manual data integration
+- Reduces errors, improves reproducibility ✔️
+
+::: notes
+So what does Tatooheene do? We wanted to build a lean toolbox that solely focuses on the Dutch guideline. And as such, it automates the most common calculations that are stated in the guideline, such as CPI-based inflation, friction method, PPP conversions, and integration of costing manual data.
+
+By doing so, Tatooheene reduces errors and improves reproducibility.
+:::
+
+## ⚠️ CAVE: Risk of Confusion
+
+Tatooheene ≠ Tatooine
+
+::::: columns
+::: {.column width="50%"}
+🪐 Tatooine
+
+> A harsh desert world orbiting twin suns in the galaxy's Outer Rim, \[...\] a lawless place ruled by Hutt gangsters. Many settlers scratch out a living on moisture farms, while spaceport cities \[...\] serve as home base for smugglers, criminals, and other rogues." — StarWars Databank
+:::
+
+::: {.column width="50%"}
+📦 Tatooheene, by contrast:
+
+<br>
+
+- Is structured and rules-based ✅
+
+- Helps you model, not smuggle 💻
+
+- Lives on CRAN, not in the Outer Rim 📦
+
+- 🧘 A peaceful, reproducible tool for Dutch HTA calculations.
+:::
+:::::
+
+::: notes
+As a side note: it is Tatooheene, and not Tatooine. While Tatooine is a harsh desert world in the Star Wars universe, ruled by Hutt gangsters, where smugglers and criminals roam. Tatooheene, by contrast, is structured and rules-based, helps you model, not smuggle, lives on CRAN, not in the Outer Rim, and is a peaceful, reproducible tool for Dutch HTA calculations.
+:::
+
+# Test tatooheene and follow along
+
+:::notes
+So if you want, follow along a short tour.
+:::
+
+## We want the friction period for 2023
+
+-  $\text{Friction period} = \frac{365}{\big(\frac{V_f}{V_o}\big)} + 28$
+  
+::: {style="font-size: 55%;"}
+   *With*:  
+    $V_f$ = Number of filled vacancies  
+    $V_o$ = Number of open vacancies
+:::
+
+- From guideline:
+
+> "\[...\] to limit the effect of fluctuations in the job market \[...\] assume the average friction period over a period of the past 5 years"
+
+::: notes
+Lets assume we want to calculate the friction period of 2023. The formula is in the guideline and based on vacancy data from Statistics Netherlands. What the new guideline also states is that we should use the average friction period over a period of the past 5 years, to limit the effect of fluctuations in the job market. So we need to calculate the friction period for 2019-2023, and then take the average.
+:::
+
+## Possible approaches
+
+:::::: columns
+::: {.column width="30%"}
+**Guideline**
+
+-   Just use what is stated in the guideline: 115 days for time between 2018-2022
+:::
+
+::: {.column width="40%"}
+**Hand crafted with Excel**
+
+-   Download data from CBS: https://www.cbs.nl/nl-nl/cijfers/detail/80472ned
+-   Copy and paste into Excel
+-   Calculate friction period with formula
+:::
+
+::: {.column width="30%"}
+**Tatooheene**
+
+- Use `friction_period()` function
+
+:::
+::::::
+
+::: notes
+You can choose from several options: [read]
+:::
+
+## Install and load the package
+
+```{r}
+#| eval: FALSE
+#| echo: TRUE
+
+# Install
+install.packages("tatooheene")
+
+# Load
+library(tatooheene)
+```
+
+:::notes
+Here is how to install and load the package from CRAN
+:::
+
+## Find the right function
+
+
+
+```{r}
+#| eval: FALSE
+#| echo: TRUE
+#| message: TRUE
+#| results: asis
+
+?tatooheene::friction_period
+
+```
+
+
+![](helpfile.png){width="70%"}
+
+::: notes
+And this is the help file for the friction_period() function in the Tatooheene package.
+
+As you can see, it is designed to be flexible — you can request friction periods for a single year or for multiple years. You can choose the unit — days or weeks — and you can specify whether you want the five-year average, which the guideline recommends, or the value for a specific year.
+
+
+It is fully documented, and comes with built-in examples.
+So even if you are not an experienced R user, the function is still accessible and easy to explore.
+:::
+
+## Use the function
+
+```{r}
+#| eval: FALSE
+#| echo: TRUE
+
+tatooheene::friction_period(
+  year = 2023,
+  type = "5_year_avg" # Default
+)
+```
+
+```{r}
+#| eval: TRUE
+#| echo: FALSE
+
+knitr::kable(tatooheene::friction_period(
+  year = 2023,
+  type = "5_year_avg" # Default
+))
+```
+
+:::notes
+Once you have called the function, it returns a tidy data frame with all relevant values.
+So instead of digging through CBS tables, copying data into Excel, and using formulas manually, you just call this one line of code — and you are done.
+:::
+
+
+## Some other useful functions
+
+::: {.columns}
+::: {.column width="50%"}
+
+### For calucations
+
+| What | Function |
+|------|----------|
+| Costs of (medical) equipment    | `depreciation_interest()`        |
+| Discount value    | `discount_value()`        |
+| Discount stream (for vectors)    | `discount_stream()`        |
+| Friction period      | `friction_period()`          |
+| Purchasing power parities     | `nl_ppp()`         |
+
+...and more
+
+:::
+::: {.column width="50%"}
+### For data
+
+| What | Function |
+|------|----------|
+| Medical unit prices    | `df_rp_medical()`        |
+| Patient & family costs    | `df_rp_patient()`        |
+| Productivity & other unit costs    | `df_rp_patient()`        |
+:::
+:::
+
+::: notes
+Besides the friction method, the package includes functions for depreciation, discounting, PPP, and fetching reference prices: all in line with the Dutch guideline.
+:::
+
+## 🖱️ Shiny Interface
+
+::: { .columns}
+::: {.column width="30%"}
+
+<br>
+<br>
+
+🔌 Same power, no coding
+<br>
+<br>
+
+💾 Upload, click, download 
+<br>
+<br>
+
+🧑‍💼 Friendly for Excel users 
+<br>
+<br>
+<br>
+👉 *bit.ly/tatooheene*
+
+:::
+::: {.column width="70%"}
+
+
+```{=html}
+ <iframe id="example1" src="https://stijnbpeeters.shinyapps.io/Tatooheene-shiny/" style="border: none; width: 100%; height: 520px" frameborder="0"></iframe>
+```
+
+
+:::
+:::
+
+::: notes
+For those not using R directly, the Shiny app offers the same functionalities. Select your settings, click through, and download the results. This is especially useful for Excel-based workflows.
+:::
+
+## ⚙️ Under the Hood
+
+::: {.columns}
+::: {.column width="50%"}
+
+- 🧼 Base R + `tidyvere` syntax
+- 🧪 `testthat` testing suite
+- 📚 `roxygen2` for docs
+- 🐙 GitHub for community input
+- 📦 CRAN for distribution
+
+:::
+::: {.column width="50%"}
+
+![](https://octodex.github.com/images/securitocat.png){fig-align="center" style="width: 60%;"}
+:::
+:::
+	
+::: notes
+Under the hood, Tatooheene uses tidyverse-compatible syntax and standard testing with the testythat package and the roxygen2 documentation framework. It is hosted on GitHub, published on CRAN, and easy to contribute to.
+:::
+
+
+## 📦 Next steps
+
+::: {.columns}
+::: {.column width="40%"}
+
+![](https://nhstalentacademy.org.uk/wp-content/uploads/WhatsNextPostItTRANS.png){ style="width: 60%;"}
+
+:::
+::: {.column width="60%"}
+
+- 📝 Survey: among potential users for *feedback*, *useability*, and *features*
+
+- 🏫 Teaching: Integrate into HTA and modelling courses
+
+- 🏥 Integrate: into Dutch reimbursement workflows
+
+- 🧑‍🤝‍🧑 Collaborate: with other HTA communities
+
+- 🛠️ Maintain: Keep up with changes in Dutch EE guidelines
+
+:::
+:::
+
+::: notes
+As next steps, we are currently gathering feedback through a user survey. We plan to publish a manuscript detailing its development and hope to integrate it into the master courses at Erasmus University. We hope that one day it will be used for Dutch reimbursement workflows and we wish for collaboration with other HTA communities. Maintenance and community input are key and will be hosted by us - for now.
+:::
+
+## 🧭 Takeaways
+
+::: notes
+To sum-up, Tatooheene helps solve recurring modelling pain points. It automates guideline-based calculations, reduces manual effort, and makes HTA models more transparent and reproducible. It supports both code and graphical user interface (GUI) workflows.
+
+[click]
+
+One of the broader aims of Tatooheene is to promote the use of standardised, open-source tools for economic evaluations — especially those submitted as part of reimbursement dossiers. Using a shared toolbox helps ensure consistency and makes the technical review process easier.
+
+It also encourages better documentation. Every function is versioned, tested, and tied to a specific section of the Dutch guideline, which improves both transparency and traceability in HTA work.
+
+By working in R and using package-based tools, version control becomes much more straightforward. You can easily track changes, reproduce outputs, and audit your calculations — something that is much harder to do in spreadsheet-based models.
+
+And lastly, it reduces the manual workload. No more downloading CBS data, pasting it into Excel, and checking if the formula still works. With Tatooheene, that entire pipeline is automated — which also reduces the risk of making errors in the process.
+
+:::
+
+📌 Tatooheene solves a real pain point in Dutch HTA modelling
+
+- Automates tedious calculations: no more CPI lookups or friction formula hacks
+- Ensures alignment with Dutch EE guideline: consistently and reproducibly
+- Supports both code-based and GUI-based workflows (Shiny app)
+
+. . . 
+
+- Promotes the use of standardised, open-source tooling for reimbursement dossiers
+- Encourages better documentation and transparency in HTA
+- Makes version control and auditing easier
+- Reduces manual workload and chance of modelling errors
+
+
+## Help us make Tatooheene better!
+
+Even though Tatooheene is already functional, we are eager to improve it further. We welcome your input and contributions:
+
+- 📝 **Feedback**: Share your thoughts on the package and Shiny app
+- 🐛 **Bug reports**: Let us know if you find any issues
+- 🛠️ **Contributions**: Help us improve the package with new features or fixes
+
+If you want to test Tatooheene and share your thoughts, you can scan the QR code below:
+
+::: {.center-collapse}
+
+![](qrhelp.png){width="40%"}
+:::
+
+::: notes
+We are actively seeking feedback and contributions to improve Tatooheene. Whether you have suggestions for new features, find bugs, or want to help with development, your input is very welcome. 
+:::
+
+## 🙏 Thank you for your attention!
+
+
+:::{ .columns}
+::: {.column width="50%"}
+
+And a special thanks to:
+
+- **Gianluca Baio** for his workshop in Rotterdam on how to build packages!
+- The **DARTH working group** & **R for HTA** for being able to stand on your giant shoulders
+
+:::
+::: {.column width="50%" .fragment}
+
+**🫵 What do you think?**
+
+- What would you like to see in Tatooheene?
+- What would you like to see in the Shiny app?
+- Would you use Tatooheene in your work?
+- Would you welcome a Tatooheene-like package for your country?
+
+:::
+:::
+
+<br>
+
+::: {.center-collapse}
+
+Contact us:   
+
+<br>
+
+**📧 [rlab@eshpm.eur.nl](mailto:rlab@eshpm.eur.nl)**
+
+:::
+
+::: notes
+Thank you very much for your attention.
+
+And a big shoutout to Gianluca Baio — his workshop in Rotterdam was really the spark for building this package — and of course to the DARTH working group and the R for HTA community. We really stand on your shoulders here.
+[click]
+Now, I am really curious to hear what you think:
+Would you use a tool like Tatooheene?
+Do you see gaps, missing features, or things that would make your life easier?
+And if you are not working in the Dutch context, would you want something like this for your own setting?
+
+We are always open to ideas, collaborations, and improvements. Feel free to reach out — you can contact us via the R Lab at Erasmus. Thanks again!
+:::

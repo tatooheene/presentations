@@ -1,0 +1,152 @@
+/* ---- ESHPM RevealJS Theme (Purple) ---- */
+
+/* --- Brand Colors --- */
+:root {
+  --eshpm-purple: #562b77;
+  --eshpm-light-purple: #ede6f3;
+  --eshpm-accent: #8a4fc6;
+  --eshpm-gray: #f5f5f5;
+  --eshpm-text: #2a2a2a;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.reveal .slide-logo {
+  height: 80px !important;
+  width: 150px !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+
+.reveal .slides {
+  width: 95% !important;
+}
+
+subtitle-container {
+  display: flex; /* Flexbox for layout */
+  align-items: center; /* Align items vertically */
+  gap: 20px; /* Space between the image and text */
+}
+
+.subtitle-image {
+  max-width: 150px; /* Adjust width */
+  height: 200px; /* Adjust height for oval shape */
+  object-fit: cover; /* Ensure the image looks good */
+  border-radius: 50%; /* Create an oval effect */
+}
+
+.subtitle-text {
+  display: flex;
+  flex-direction: column; /* Stack text vertically */
+  justify-content: center; /* Align text vertically in the center */
+}
+
+.subtitle-text p {
+  margin: 0; /* Remove default paragraph margins */
+}
+
+/* --- Background & Text --- */
+.reveal {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  color: var(--eshpm-text);
+  background-color: white;
+}
+
+.reveal h1, .reveal h2, .reveal h3 {
+  color: var(--eshpm-purple);
+  font-weight: 700;
+  margin-bottom: 0.5em;
+}
+
+.reveal h1 {
+  font-size: 2em;
+}
+
+.reveal h2 {
+  font-size: 1.6em;
+}
+
+.reveal h3 {
+  font-size: 1.3em;
+}
+
+/* --- Links --- */
+.reveal a {
+  color: var(--eshpm-accent);
+  text-decoration: underline;
+}
+
+/* --- Code Blocks --- */
+.reveal pre code {
+  background: var(--eshpm-light-purple);
+  color: var(--eshpm-purple);
+  font-size: 0.9em;
+  border-radius: 8px;
+  padding: 0.8em;
+}
+
+/* --- Tables --- */
+.reveal table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  font-size: 0.95em;
+}
+
+.reveal th, .reveal td {
+  border: 1px solid #ddd;
+  padding: 0.5em 0.75em;
+}
+
+.reveal th {
+  background-color: var(--eshpm-purple);
+  color: white;
+}
+
+.reveal td {
+  background-color: var(--eshpm-gray);
+}
+
+/* --- Incremental Fragments --- */
+.reveal .fragment {
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.reveal .fragment.visible {
+  opacity: 1;
+}
+
+/* --- Custom Columns Layout (optional) --- */
+.columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.column {
+  flex: 1;
+}
+
+
+
+/* --- Fix for numbered list indentation --- */
+.reveal ol {
+  margin-left: 1.5em; /* Adjust as needed: try 1em–2em */
+  padding-left: 0.5em;
+}
+
+
+.compact-callout {
+  display: inline-block;
+  width: auto;
+  max-width: 80%;     /* optional: constrain it */
+  margin: 0 auto;     /* centres it */
+}
+
+.center-collapse {
+  display: flex;
+  align-items: center;      /* vertical centring */
+  justify-content: center;  /* horizontal centring */
+  height: 100%;             /* required for vertical centring */
+}

@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="240610-r_for_hta_files/libs/clipboard/clipboard.min.js"></script>
+<script src="240610-r_for_hta_files/libs/quarto-html/tabby.min.js"></script>
+<script src="240610-r_for_hta_files/libs/quarto-html/popper.min.js"></script>
+<script src="240610-r_for_hta_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="240610-r_for_hta_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="240610-r_for_hta_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="240610-r_for_hta_files/libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.43">
+
+  <title>tatooheene: The R Package Toolbox for Health Economic Evaluations Aligned with the Dutch Guideline</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="240610-r_for_hta_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="240610-r_for_hta_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="240610-r_for_hta_files/libs/revealjs/dist/theme/quarto-2f366650f320edcfcf53d73c80250a32.css">
+  <link rel="stylesheet" href="styles.css">
+  <link href="240610-r_for_hta_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="240610-r_for_hta_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="240610-r_for_hta_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="240610-r_for_hta_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="240610-r_for_hta_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="240610-r_for_hta_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-opacity="0.5" data-background-size="cover" data-notes="Hi everyone, and thank you for joining this session. My name is Frederick Thielen, and I am based at the Erasmus University in Rotterdam. Today, I would like to walk you through a small but very practical tool we developed to support health economic evaluations that follow the Dutch guideline. The package is called Tatooheene. And the key idea behind it is quite simple: we wanted to make it easier — and more reliable — to do evaluations in line with the national standard. But we also wanted to do that in a way that is reproducible, transparent, and avoids repetitive manual work. Imagine you are building a model for a new intervention. You are trying to calculate productivity losses using the friction cost method, or adjust a unit cost to current price levels — and you are flipping through PDFs, copy-pasting values, maybe checking an old Excel tool from 2014. It works — sort of — but it is slow, error-prone, and hard to track. Tatooheene is designed to take care of exactly those steps. To take what’s already in the Dutch guideline and make it directly usable in R — with functions that are documented, tested, and easy to integrate into your model code." class="quarto-title-block center">
+  <h1 class="title"><code>tatooheene</code>: The R Package Toolbox for Health Economic Evaluations Aligned with the Dutch Guideline</h1>
+  <p class="subtitle"></p><div class="subtitle-container">
+<img src="fred.jpg" alt="Stijn Image" class="subtitle-image">
+<div class="subtitle-text">
+<p>
+<span style="color:purple;">Erasmus School of Health Policy &amp; Management (ESHPM)
+</span></p>
+<span>
+<p>
+<i class="fas fa-envelope"></i> <strong>Email:</strong> thielen@eshpm.eur.nl
+</p>
+<p>
+<i class="fab fa-github"></i> <strong>GitHub:</strong> fthielen
+</p>
+</span></div>
+</div><p></p>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="conflict-of-interest-disclosure" class="slide level2 center">
+<h2>🧾 Conflict of Interest Disclosure</h2>
+<ul>
+<li>I have received research funding or support from Celgene, CADTH, NICE, ZIN, VWS, FOPH, and EHA.</li>
+</ul>
+<p><br></p>
+<ul>
+<li>I provided consultancy or lectures for AstraZeneca, Boehringer-Ingelheim, Optimax Access, Dark Peak Analytics, ASPHER, GCCHE, and TriData.</li>
+</ul>
+<p><br></p>
+<ul>
+<li>I received hospitality from European Access Academy (dinner) and MSD (coffee). One unpaid talk to COGEM.</li>
+</ul>
+<p><br></p>
+<div style="font-size: 65%;">
+<p>Abbreviations: CADTH = Canadian Agency for Drugs and Technologies in Health, NICE = National Institute for Health and Care Excellence, ZIN = Dutch Healthcare Institute, VWS = Dutch Ministry of Health, Welfare and Sport, FOPH = Swiss Federal Office of Public Health, EHA = European Haematology Association, ASPHER = Association of Schools of Public Health in the European Region, GCCHE = Global Consortium on Climate and Health Education, COGEM = Dutch Commission on Genetic Modification</p>
+</div>
+<aside class="notes">
+<p>Just to be transparent, I have worked with a number of organisations, but none of those relationships are related to this package or presentation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="hta-a-national-approach" class="slide level2 center">
+<h2>🌍 HTA: a national approach?</h2>
+<div class="columns">
+<div class="column" style="width:70%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs41669-020-00250-7/MediaObjects/41669_2020_250_Fig2_HTML.png?as=webp"></p>
+<figcaption>DOI: 10.1007/s41669-020-00250-7</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:30%;">
+<div style="font-size: 75%;">
+<p><br></p>
+<ul>
+<li>Many EU (and non-EU) countries have their own HTA processes and pertinent guidelines</li>
+<li>Huge variation in recommended study perspectives and to-be-included costs</li>
+<li>No consensus on how to calculate the rate for discounting</li>
+</ul>
+</div>
+</div></div>
+<aside class="notes">
+<p>As you know, in many countries, the HTA process is national — and this is true for both EU and non-EU settings. Each country develops its own guidelines, often tailored to their healthcare system, policy priorities, and local data sources.</p>
+<p>What you see in this figure is just how fragmented that landscape can be. There is huge variation in how costs are valued, what study perspectives are recommended — whether that is healthcare payer, societal, or something in between — and even in how core methodological elements like discounting are handled.</p>
+<p>Many countries recommend discounting both costs and effects, but discount rates vary significantly and can be different for costs and effects.</p>
+<p>So, while we often talk about HTA as if it were one unified approach, in practice, it is highly context-dependent. And if you want to do work that aligns with your own national guidelines — or submit a reimbursement dossier — then you have to follow the local rules exactly.</p>
+<p>That is where a tool like Tatooheene comes in. It is built around the Dutch guideline, helping ensure that your analysis is not just good, but also methodologically compliant.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="the-dutch-guideline-for-economic-evaluations-in-healthcare-2024-version" class="slide level2 center">
+<h2>🇳🇱 The Dutch Guideline for economic evaluations in healthcare (2024 version)</h2>
+<p>🔎 Revised and published in January 2024</p>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><br></p>
+<p>Contains three in-depth modules:</p>
+<ul>
+<li>💶 The <strong>costing manual</strong></li>
+<li>🎭 <strong>QALY and quality-of-life measures</strong> (only available in Dutch)</li>
+<li>📊 <strong>Uncertainty and Value of information analyses</strong> (only available in Dutch).</li>
+</ul>
+</div><div class="column" style="width:40%;">
+<iframe width="780" height="500" src="manualpdf.pdf"></iframe>
+</div></div>
+<aside class="notes">
+<p>Recently, in January 2024, the Dutch Healthcare Institute published an updated version of its guideline for economic evaluations in healthcare. It includes three detailed modules: one on costing, one on QALY and quality-of-life measures, and one on uncertainty and value of information analyses. Today I will mainly focus on the costing manual, as that is where Tatooheene fits in.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="things-the-dutch-costing-manual-covers" class="slide level2 center">
+<h2>Things the Dutch costing manual covers</h2>
+<ul>
+<li>A step-by-step plan for costing studies</li>
+<li>How to <em>identify</em>, <em>value</em>, and <em>measure</em> costs in healthcare</li>
+<li>Repository for <em>reference prices</em></li>
+<li>Several formulas for:
+<ul>
+<li><strong>discounting</strong> costs and effects</li>
+<li>calculating the <strong>friction period</strong> (to determine productivity losses)</li>
+<li>calculating annual costs for <strong>depreciation and interest</strong></li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>The Dutch costing manual is quite detailed and prescriptive — and in many ways, that is a strength. It gives a clear, step-by-step framework for conducting costing studies in healthcare.</p>
+<p>It tells you how to identify relevant cost categories, how to measure them, how to assign values — and it provides a repository of reference prices to make that process easier and more standardised.</p>
+<p>It also includes a number of standard formulas: - For example, how to discount future costs and effects - How to calculate productivity losses using the so-called friction cost method - And how to compute annual costs for capital goods, including depreciation and interest</p>
+<p>The aim here is consistency across studies that feed into reimbursement decisions. But in practice, these calculations can be tricky, especially if done manually or copied across spreadsheets. They need to be updated regularly and are prone to error — and that is exactly what we tried to address with our package.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="why-this-toolbox" class="slide level2 center">
+<h2>🤔 Why this toolbox?</h2>
+<aside class="notes">
+<p>Although the guideline is detailed and provides relatively recent reference values, we have seen that these values are often outdated in published studies. [click]</p>
+<p>For example, the friction period which is needed to estimate productivity losses, needs to be calculated with recent data from Statistics Netherlands. [click]</p>
+<p>But several studies kept using the 2014 [click] value: long after it was outdated and up to the year 2021. [click] But in fact, these values should have been updated and were quite different from the stated reference value. [click]</p>
+<p>A possible reason for this is that the manual updating is time consuming, but also that researchers rely on the reference values instead of the reference formulas.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div style="font-size: 85%;">
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Dutch EE guideline provides</strong></p>
+<ul>
+<li>📏 Reference values for 2023</li>
+<li>📊 Database updates required from Statistics Netherlands (CBS) and the OECD</li>
+</ul>
+<p><em>BUT: these values are often outdated in published studies</em></p>
+</div><div class="column fragment" style="width:50%;">
+<p><strong>Example: friction period</strong></p>
+<ul>
+<li><span class="math inline">\(\text{Friction period} = \frac{365}{\big(\frac{V_f}{V_o}\big)} + 28\)</span></li>
+</ul>
+<div style="font-size: 55%;">
+<p><em>With</em>:<br>
+<span class="math inline">\(V_f\)</span> = Number of filled vacancies<br>
+<span class="math inline">\(V_o\)</span> = Number of open vacancies</p>
+</div>
+<div>
+<ul>
+<li class="fragment">Stated friction period in 2014 = 85 days
+<ul>
+<li class="fragment">Used for analyses in 2017, 2018, 2019, and 2021<br>
+</li>
+</ul></li>
+<li class="fragment">Should have been: 101 (2017), 107 (2018), 111 (2019), 120 (2021) 🧮</li>
+</ul>
+</div>
+</div></div>
+</div>
+<div class="fragment">
+<div class="center-collapse">
+<div class="compact-callout">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Possible reason</strong></p>
+</div>
+<div class="callout-content">
+<p>Updating data is manual, tidious, and time consuming</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="meet-tatooheene" class="slide level2 center">
+<h2>🛸 Meet Tatooheene</h2>
+<p><strong>T</strong>echnology <strong>A</strong>ppraisal <strong>TOO</strong>lbox for <strong>H</strong>ealth <strong>E</strong>conomic <strong>E</strong>valuations in the <strong>NE</strong>therlands</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><br></p>
+<ul>
+<li>🧰 R package + 🖥️ Shiny app</li>
+<li>🆓 Open source
+<ul>
+<li>🛠️ On CRAN</li>
+<li>📂 On GitHub</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="center-collapse">
+<p><br></p>
+<p><img data-src="hexa.png" style="width:40.0%"></p>
+</div>
+</div></div>
+<div class="center-collapse">
+<p><br></p>
+<p><br></p>
+<p>Developed by:</p>
+<p>👨‍🔬 Frederick Thielen · 👨‍💻 Stijn Peeters · 👩‍🏫 Eline Krijkamp</p>
+</div>
+<aside class="notes">
+<p>To make life of R-modellers and code reviewers easier, we developed Tatooheene, which stands for Technology Appraisal Toolbox for Health Economic Evaluations in the Netherlands. It is an open source R package and Shiny app that automates the most common calculations in health economic evaluations <strong>that are stated</strong> in the Dutch guideline. It is available on CRAN and on GitHub, and it was developed by Stijn Peeters, Eline Krijkamp and myself. Both Eline and Stijn you have met on day one of this conference.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="what-does-it-do" class="slide level2 center">
+<h2>🧠 What does it do?</h2>
+<p>Automates:</p>
+<ul>
+<li>🧮 CPI-based inflation</li>
+<li>🧱 Friction method</li>
+<li>🌍 Purchasing power parity (PPP) conversions</li>
+<li>🏥 Costing manual data integration</li>
+<li>Reduces errors, improves reproducibility ✔️</li>
+</ul>
+<aside class="notes">
+<p>So what does Tatooheene do? We wanted to build a lean toolbox that solely focuses on the Dutch guideline. And as such, it automates the most common calculations that are stated in the guideline, such as CPI-based inflation, friction method, PPP conversions, and integration of costing manual data.</p>
+<p>By doing so, Tatooheene reduces errors and improves reproducibility.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="cave-risk-of-confusion" class="slide level2 center">
+<h2>⚠️ CAVE: Risk of Confusion</h2>
+<p>Tatooheene ≠ Tatooine</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>🪐 Tatooine</p>
+<blockquote>
+<p>A harsh desert world orbiting twin suns in the galaxy’s Outer Rim, […] a lawless place ruled by Hutt gangsters. Many settlers scratch out a living on moisture farms, while spaceport cities […] serve as home base for smugglers, criminals, and other rogues.” — StarWars Databank</p>
+</blockquote>
+</div><div class="column" style="width:50%;">
+<p>📦 Tatooheene, by contrast:</p>
+<p><br></p>
+<ul>
+<li><p>Is structured and rules-based ✅</p></li>
+<li><p>Helps you model, not smuggle 💻</p></li>
+<li><p>Lives on CRAN, not in the Outer Rim 📦</p></li>
+<li><p>🧘 A peaceful, reproducible tool for Dutch HTA calculations.</p></li>
+</ul>
+</div></div>
+<aside class="notes">
+<p>As a side note: it is Tatooheene, and not Tatooine. While Tatooine is a harsh desert world in the Star Wars universe, ruled by Hutt gangsters, where smugglers and criminals roam. Tatooheene, by contrast, is structured and rules-based, helps you model, not smuggle, lives on CRAN, not in the Outer Rim, and is a peaceful, reproducible tool for Dutch HTA calculations.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section>
+<section id="test-tatooheene-and-follow-along" class="title-slide slide level1 center">
+<h1>Test tatooheene and follow along</h1>
+<aside class="notes">
+<p>So if you want, follow along a short tour.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="we-want-the-friction-period-for-2023" class="slide level2 center">
+<h2>We want the friction period for 2023</h2>
+<ul>
+<li><span class="math inline">\(\text{Friction period} = \frac{365}{\big(\frac{V_f}{V_o}\big)} + 28\)</span></li>
+</ul>
+<div style="font-size: 55%;">
+<p><em>With</em>:<br>
+<span class="math inline">\(V_f\)</span> = Number of filled vacancies<br>
+<span class="math inline">\(V_o\)</span> = Number of open vacancies</p>
+</div>
+<ul>
+<li>From guideline:</li>
+</ul>
+<blockquote>
+<p>“[…] to limit the effect of fluctuations in the job market […] assume the average friction period over a period of the past 5 years”</p>
+</blockquote>
+<aside class="notes">
+<p>Lets assume we want to calculate the friction period of 2023. The formula is in the guideline and based on vacancy data from Statistics Netherlands. What the new guideline also states is that we should use the average friction period over a period of the past 5 years, to limit the effect of fluctuations in the job market. So we need to calculate the friction period for 2019-2023, and then take the average.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="possible-approaches" class="slide level2 center">
+<h2>Possible approaches</h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><strong>Guideline</strong></p>
+<ul>
+<li>Just use what is stated in the guideline: 115 days for time between 2018-2022</li>
+</ul>
+</div><div class="column" style="width:40%;">
+<p><strong>Hand crafted with Excel</strong></p>
+<ul>
+<li>Download data from CBS: https://www.cbs.nl/nl-nl/cijfers/detail/80472ned</li>
+<li>Copy and paste into Excel</li>
+<li>Calculate friction period with formula</li>
+</ul>
+</div><div class="column" style="width:30%;">
+<p><strong>Tatooheene</strong></p>
+<ul>
+<li>Use <code>friction_period()</code> function</li>
+</ul>
+</div></div>
+<aside class="notes">
+<p>You can choose from several options: [read]</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="install-and-load-the-package" class="slide level2 center">
+<h2>Install and load the package</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="co"># Install</span></span>
+<span id="cb1-2"><a href=""></a><span class="fu">install.packages</span>(<span class="st">"tatooheene"</span>)</span>
+<span id="cb1-3"><a href=""></a></span>
+<span id="cb1-4"><a href=""></a><span class="co"># Load</span></span>
+<span id="cb1-5"><a href=""></a><span class="fu">library</span>(tatooheene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<aside class="notes">
+<p>Here is how to install and load the package from CRAN</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="find-the-right-function" class="slide level2 center">
+<h2>Find the right function</h2>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>?tatooheene<span class="sc">::</span>friction_period</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<img data-src="helpfile.png" style="width:70.0%" class="r-stretch"><aside class="notes">
+<p>And this is the help file for the friction_period() function in the Tatooheene package.</p>
+<p>As you can see, it is designed to be flexible — you can request friction periods for a single year or for multiple years. You can choose the unit — days or weeks — and you can specify whether you want the five-year average, which the guideline recommends, or the value for a specific year.</p>
+<p>It is fully documented, and comes with built-in examples. So even if you are not an experienced R user, the function is still accessible and easy to explore.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="use-the-function" class="slide level2 center">
+<h2>Use the function</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>tatooheene<span class="sc">::</span><span class="fu">friction_period</span>(</span>
+<span id="cb3-2"><a href=""></a>  <span class="at">year =</span> <span class="dv">2023</span>,</span>
+<span id="cb3-3"><a href=""></a>  <span class="at">type =</span> <span class="st">"5_year_avg"</span> <span class="co"># Default</span></span>
+<span id="cb3-4"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<colgroup>
+<col style="width: 2%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 24%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Year</th>
+<th style="text-align: right;">Filled vacancies</th>
+<th style="text-align: right;">Open vacancies</th>
+<th style="text-align: right;">Friction period in days</th>
+<th style="text-align: right;">Friction period in weeks</th>
+<th style="text-align: right;">Friction period days average over 5 years</th>
+<th style="text-align: right;">Friction period weeks average over 5 years</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2023</td>
+<td style="text-align: right;">1462</td>
+<td style="text-align: right;">423.7</td>
+<td style="text-align: right;">133.8525</td>
+<td style="text-align: right;">19.12179</td>
+<td style="text-align: right;">120.6827</td>
+<td style="text-align: right;">17.24039</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<aside class="notes">
+<p>Once you have called the function, it returns a tidy data frame with all relevant values. So instead of digging through CBS tables, copying data into Excel, and using formulas manually, you just call this one line of code — and you are done.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="some-other-useful-functions" class="slide level2 center">
+<h2>Some other useful functions</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="for-calucations">For calucations</h3>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>What</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Costs of (medical) equipment</td>
+<td><code>depreciation_interest()</code></td>
+</tr>
+<tr class="even">
+<td>Discount value</td>
+<td><code>discount_value()</code></td>
+</tr>
+<tr class="odd">
+<td>Discount stream (for vectors)</td>
+<td><code>discount_stream()</code></td>
+</tr>
+<tr class="even">
+<td>Friction period</td>
+<td><code>friction_period()</code></td>
+</tr>
+<tr class="odd">
+<td>Purchasing power parities</td>
+<td><code>nl_ppp()</code></td>
+</tr>
+</tbody>
+</table>
+<p>…and more</p>
+</div><div class="column" style="width:50%;">
+<h3 id="for-data">For data</h3>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>What</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Medical unit prices</td>
+<td><code>df_rp_medical()</code></td>
+</tr>
+<tr class="even">
+<td>Patient &amp; family costs</td>
+<td><code>df_rp_patient()</code></td>
+</tr>
+<tr class="odd">
+<td>Productivity &amp; other unit costs</td>
+<td><code>df_rp_patient()</code></td>
+</tr>
+</tbody>
+</table>
+</div></div>
+<aside class="notes">
+<p>Besides the friction method, the package includes functions for depreciation, discounting, PPP, and fetching reference prices: all in line with the Dutch guideline.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="shiny-interface" class="slide level2 center">
+<h2>🖱️ Shiny Interface</h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><br> <br></p>
+<p>🔌 Same power, no coding <br> <br></p>
+<p>💾 Upload, click, download <br> <br></p>
+<p>🧑‍💼 Friendly for Excel users <br> <br> <br> 👉 <em>bit.ly/tatooheene</em></p>
+</div><div class="column" style="width:70%;">
+ <iframe id="example1" src="https://stijnbpeeters.shinyapps.io/Tatooheene-shiny/" style="border: none; width: 100%; height: 520px" frameborder="0"></iframe>
+</div></div>
+<aside class="notes">
+<p>For those not using R directly, the Shiny app offers the same functionalities. Select your settings, click through, and download the results. This is especially useful for Excel-based workflows.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="under-the-hood" class="slide level2 center">
+<h2>⚙️ Under the Hood</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>🧼 Base R + <code>tidyvere</code> syntax</li>
+<li>🧪 <code>testthat</code> testing suite</li>
+<li>📚 <code>roxygen2</code> for docs</li>
+<li>🐙 GitHub for community input</li>
+<li>📦 CRAN for distribution</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://octodex.github.com/images/securitocat.png" class="quarto-figure quarto-figure-center" style="width: 60%;"></p>
+</figure>
+</div>
+</div></div>
+<aside class="notes">
+<p>Under the hood, Tatooheene uses tidyverse-compatible syntax and standard testing with the testythat package and the roxygen2 documentation framework. It is hosted on GitHub, published on CRAN, and easy to contribute to.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="next-steps" class="slide level2 center">
+<h2>📦 Next steps</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><img data-src="https://nhstalentacademy.org.uk/wp-content/uploads/WhatsNextPostItTRANS.png" style="width: 60%;"></p>
+</div><div class="column" style="width:60%;">
+<ul>
+<li><p>📝 Survey: among potential users for <em>feedback</em>, <em>useability</em>, and <em>features</em></p></li>
+<li><p>🏫 Teaching: Integrate into HTA and modelling courses</p></li>
+<li><p>🏥 Integrate: into Dutch reimbursement workflows</p></li>
+<li><p>🧑‍🤝‍🧑 Collaborate: with other HTA communities</p></li>
+<li><p>🛠️ Maintain: Keep up with changes in Dutch EE guidelines</p></li>
+</ul>
+</div></div>
+<aside class="notes">
+<p>As next steps, we are currently gathering feedback through a user survey. We plan to publish a manuscript detailing its development and hope to integrate it into the master courses at Erasmus University. We hope that one day it will be used for Dutch reimbursement workflows and we wish for collaboration with other HTA communities. Maintenance and community input are key and will be hosted by us - for now.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="takeaways" class="slide level2 center">
+<h2>🧭 Takeaways</h2>
+<aside class="notes">
+<p>To sum-up, Tatooheene helps solve recurring modelling pain points. It automates guideline-based calculations, reduces manual effort, and makes HTA models more transparent and reproducible. It supports both code and graphical user interface (GUI) workflows.</p>
+<p>[click]</p>
+<p>One of the broader aims of Tatooheene is to promote the use of standardised, open-source tools for economic evaluations — especially those submitted as part of reimbursement dossiers. Using a shared toolbox helps ensure consistency and makes the technical review process easier.</p>
+<p>It also encourages better documentation. Every function is versioned, tested, and tied to a specific section of the Dutch guideline, which improves both transparency and traceability in HTA work.</p>
+<p>By working in R and using package-based tools, version control becomes much more straightforward. You can easily track changes, reproduce outputs, and audit your calculations — something that is much harder to do in spreadsheet-based models.</p>
+<p>And lastly, it reduces the manual workload. No more downloading CBS data, pasting it into Excel, and checking if the formula still works. With Tatooheene, that entire pipeline is automated — which also reduces the risk of making errors in the process.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<p>📌 Tatooheene solves a real pain point in Dutch HTA modelling</p>
+<ul>
+<li>Automates tedious calculations: no more CPI lookups or friction formula hacks</li>
+<li>Ensures alignment with Dutch EE guideline: consistently and reproducibly</li>
+<li>Supports both code-based and GUI-based workflows (Shiny app)</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Promotes the use of standardised, open-source tooling for reimbursement dossiers</li>
+<li>Encourages better documentation and transparency in HTA</li>
+<li>Makes version control and auditing easier</li>
+<li>Reduces manual workload and chance of modelling errors</li>
+</ul>
+</div>
+</section>
+<section id="help-us-make-tatooheene-better" class="slide level2 center">
+<h2>Help us make Tatooheene better!</h2>
+<p>Even though Tatooheene is already functional, we are eager to improve it further. We welcome your input and contributions:</p>
+<ul>
+<li>📝 <strong>Feedback</strong>: Share your thoughts on the package and Shiny app</li>
+<li>🐛 <strong>Bug reports</strong>: Let us know if you find any issues</li>
+<li>🛠️ <strong>Contributions</strong>: Help us improve the package with new features or fixes</li>
+</ul>
+<p>If you want to test Tatooheene and share your thoughts, you can scan the QR code below:</p>
+<div class="center-collapse">
+<p><img data-src="qrhelp.png" style="width:40.0%"></p>
+</div>
+<aside class="notes">
+<p>We are actively seeking feedback and contributions to improve Tatooheene. Whether you have suggestions for new features, find bugs, or want to help with development, your input is very welcome.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="thank-you-for-your-attention" class="slide level2 center">
+<h2>🙏 Thank you for your attention!</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>And a special thanks to:</p>
+<ul>
+<li><strong>Gianluca Baio</strong> for his workshop in Rotterdam on how to build packages!</li>
+<li>The <strong>DARTH working group</strong> &amp; <strong>R for HTA</strong> for being able to stand on your giant shoulders</li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<p><strong>🫵 What do you think?</strong></p>
+<ul>
+<li>What would you like to see in Tatooheene?</li>
+<li>What would you like to see in the Shiny app?</li>
+<li>Would you use Tatooheene in your work?</li>
+<li>Would you welcome a Tatooheene-like package for your country?</li>
+</ul>
+</div></div>
+<p><br></p>
+<div class="center-collapse">
+<p>Contact us:</p>
+<p><br></p>
+<p><strong>📧 <a href="mailto:rlab@eshpm.eur.nl">rlab@eshpm.eur.nl</a></strong></p>
+</div>
+<aside class="notes">
+<p>Thank you very much for your attention.</p>
+<p>And a big shoutout to Gianluca Baio — his workshop in Rotterdam was really the spark for building this package — and of course to the DARTH working group and the R for HTA community. We really stand on your shoulders here. [click] Now, I am really curious to hear what you think: Would you use a tool like Tatooheene? Do you see gaps, missing features, or things that would make your life easier? And if you are not working in the Dutch context, would you want something like this for your own setting?</p>
+<p>We are always open to ideas, collaborations, and improvements. Feel free to reach out — you can contact us via the R Lab at Erasmus. Thanks again!</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<p><img src="eshpm-logo.jpg" class="slide-logo"></p>
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="240610-r_for_hta_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="240610-r_for_hta_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
